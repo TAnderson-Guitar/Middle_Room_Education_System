@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Middle Room System</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+<link rel="shortcut icon" href="https://edu.sites.moodlecentral.com.au/ap/schools/nsw/quakershil-h/pluginfile.php/1/theme_moove/favicon/1772497795/QHHS%20Logo.ico">
+</head>
+{% include "header.html" %}
+<body>
+    <div class="banner">
+  <h1>Welcome To the Middle Room!</h1>
+</div>
+<div class="container mt-5">
+    <div class="text-center mb-4">
+        <p class="lead">
+            Learn Step by Step, How to use the Middle Room Equipment. Complete your Basic Online Course, Follow The Tutorial,
+            Pass the Test and book your Recess or Lunch in the Middle Room.
+        </p>
+    </div>
+
+<div class="home-card shadow p-5 mb-5" style="border-radius: 20px;">
+    <div class="row g-4">
+        
+        <div class="col-md-6">
+            <div class="card shadow p-3" style="border-left: 6px solid #293D82;">
+                <div class="card-body">
+                    <h3 class="fw-semibold">Create or Login</h3>
+                    <p>
+                        Create an account, learn about the middle room, take the test about the middle room and book the middle room
+                    </p>
+                    <a href="/login" class="btn btn-primary w-100">Login or Register →</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card shadow p-3" style="border-left: 6px solid #293D82;">
+                <div class="card-body">
+                    <h3 class="fw-semibold">Learn about the Middle Room</h3>
+                    <p>
+                        Read about the middle room operations, do's and dont's, how it should be kept and how to use it safely
+                    </p>
+                    <a href="/training" class="btn btn-primary w-100">Begin Learning→</a>
+                </div>
+            </div>
+        </div> 
+        <div class="col-md-6">
+            <div class="card shadow p-3" style="border-left: 6px solid #293D82;">
+                <div class="card-body">
+                    <h3 class="fw-semibold">Take the test of Competancy</h3>
+                    <p>
+                        Click the button below to access the test page, take the safety test to be able to book the middle room
+                    </p>
+                    <a href="/test" class="btn btn-primary w-100">Start the Test Now →</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card shadow p-3" style="border-left: 6px solid #293D82;">
+                <div class="card-body">
+                    <h3 class="fw-semibold">Get Started Today</h3>
+                    <p>
+                        Create an account to access training materials, take the safety test,
+                        and book your time in the Middle Room.
+                    </p>
+                    <a href="/login" class="btn btn-primary w-100">Login or Register →</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
