@@ -2,9 +2,10 @@ from flask import Flask, render_template, request, jsonify, redirect, session
 from utils.security import verify_password
 from database.models import get_user_by_email, create_user
 from auth.oauth import google_login_url, exchange_code_for_token, get_google_user_info
+from Everything.config import FLASK_SECRET_KEY
 
 app = Flask(__name__)
-app.secret_key = "dev-secret"
+app.secret_key = FLASK_SECRET_KEY
 
 
 def is_logged_in():
