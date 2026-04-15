@@ -1,3 +1,0 @@
-GOOGLE_CLIENT_ID = "your-client-id"
-GOOGLE_CLIENT_SECRET = "your-client-secret"
-GOOGLE_REDIRECT_URI = "http://localhost:5000/auth/google/callback"
