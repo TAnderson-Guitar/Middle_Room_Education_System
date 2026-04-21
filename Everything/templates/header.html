@@ -5,18 +5,53 @@
 <link rel="shortcut icon" href="https://edu.sites.moodlecentral.com.au/ap/schools/nsw/quakershil-h/pluginfile.php/1/theme_moove/favicon/1772497795/QHHS%20Logo.ico">
 
 <header style="background-color: #ffffff; padding: 15px 0;">
-    <div id="menu" class="container">
-       <h1 style="font-weight: bold" href="/">Middle Room Education and Booking</h1>
-
+    <div id="menu" class="container d-flex justify-content-between align-items-center">
+        <a href="/" class="d-flex align-items-center text-decoration-none">
+            <img src="{{ url_for('static', filename='icon.png') }}" 
+                 alt="Logo" 
+                 style="height: 40px; width: 40px; margin-right: 10px;">
+            <h1 style="font-weight: bold; margin: 0; color: #19244c;">
+                Middle Room Education and Booking
+            </h1>
+        </a>
         <nav>
-            <ul style="list-style: none; padding: 0; display: flex; gap: 20px">
+            <ul style="list-style: none; padding: 0; display: flex; gap: 20px; align-items: center; margin: 0;">
+
                 <li><a class="active text-#19244c" href="/">Home</a></li>
-                <li><a class="active text-#19244c" href="/training">Learn About the Middle Room</a></li>
+                <li><a class="active text-#19244c" href="/training">Learn More</a></li>
                 <li><a class="active text-#19244c" href="/test">Take Your Test</a></li>
                 <li><a class="active text-#19244c" href="/booking">Book a Reservation</a></li>
+
+                {% if session.get("user") %}
+                <li class="dropdown">
+                    <a class="dropdown-toggle text-#19244c" 
+                       href="#" 
+                       role="button" 
+                       data-bs-toggle="dropdown">
+                        {% if session["user"] is string %}
+                        {{ session["user"].split("@")[0] }}
+                        {% else %}
+                            {{ session["user"]["email"].split("@")[0] }}
+                        {% endif %}
+
+                    </a>
+
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="/training">Training</a></li>
+                        <li><a class="dropdown-item" href="/test">Test</a></li>
+                        <li><a class="dropdown-item" href="/booking">Booking</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger" href="/logout">Logout</a></li>
+                    </ul>
+                </li>
+
+                {% else %}
                 <li><a class="active text-#19244c" href="/login">Login</a></li>
+                {% endif %}
+
             </ul>
         </nav>
+
     </div>
 </header>
-</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

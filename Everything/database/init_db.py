@@ -12,7 +12,16 @@ CREATE TABLE IF NOT EXISTS users (
 )
 """)
 
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS bookings (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    email TEXT NOT NULL,
+    day TEXT NOT NULL,
+    slot TEXT NOT NULL
+)
+""")
+
 conn.commit()
 conn.close()
 
-print("Database initialized.")
+print("Database created with users + bookings tables.")

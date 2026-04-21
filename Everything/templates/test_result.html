@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Middle Room Test Results</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+<link rel="shortcut icon" href="https://edu.sites.moodlecentral.com.au/ap/schools/nsw/quakershil-h/pluginfile.php/1/theme_moove/favicon/1772497795/QHHS%20Logo.ico">
+</head>
+{% include "header.html" %}
+
+<body>
+    <div class="banner">
+  <h1>Test Results</h1>
+</div>
+    
+<div class="container mt-5" style="max-width: 600px;">
+
+    <div class="text-center mb-4">
+        <div class="display-1 text-success">✓</div>
+        <h1 class="fw-bold">Congratulations!</h1>
+        <h2 class="text-success">{{ (score / total * 100)|round(0) }}%</h2>
+        <p class="lead">You answered {{ score }} out of {{ total }} questions correctly</p>
+    </div>
+
+    {% if passed %}
+        <div class="alert alert-success text-center">
+            <strong>You’ve successfully passed the safety test!</strong><br>
+            You can now book time slots in the Middle Room.
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="/booking" class="btn btn-primary btn-lg">Book a Time Slot</a>
+        </div>
+
+    {% else %}
+        <div class="alert alert-danger text-center">
+            <strong>You did not pass the test.</strong><br>
+            You must answer all questions correctly to continue.
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="/training" class="btn btn-secondary btn-lg">Return to Training</a>
+        </div>
+    {% endif %}
+
+</div>
+
+</body>
+</html>
