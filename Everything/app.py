@@ -90,9 +90,16 @@ def training():
 
 @app.route("/test", methods=["GET", "POST"])
 def test():
+    total = len(TEST_QUESTIONS)
+
+    if not is_logged_in():
+        return redirect("/login")
+
+    if not training_completed():
+        return redirect("/training")
+
     if request.method == "POST":
         score = 0
-        total = len(TEST_QUESTIONS)
 
         for q in TEST_QUESTIONS:
             user_answer = request.form.get(q["id"])
@@ -107,6 +114,7 @@ def test():
         return render_template("test_result.html", score=score, total=total, passed=passed)
 
     return render_template("test.html", questions=TEST_QUESTIONS)
+
 
 
 @app.route("/booking")
