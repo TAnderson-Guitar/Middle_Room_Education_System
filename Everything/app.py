@@ -8,6 +8,7 @@ from database.models import get_user_by_email, create_user
 from auth.oauth import google_login_url, exchange_code_for_token, get_google_user_info
 from config import FLASK_SECRET_KEY, GOOGLE_REDIRECT_URI
 from database.models import create_booking, get_bookings_for_user, booking_exists, delete_booking
+from database.models import get_db
 
 
 app = Flask(__name__)
@@ -83,9 +84,15 @@ def training():
 
     if request.method == "POST":
         session["training_done"] = True
+
+        db = get_db()
+        db.execute("UPDATE users SET training_done = 1 WHERE email = ?", (session["user"],))
+        db.commit()
+
         return redirect("/test")
 
     return render_template("training.html")
+
 
 
 @app.route("/test", methods=["GET", "POST"])
@@ -110,6 +117,10 @@ def test():
 
         if passed:
             session["test_done"] = True
+
+            db = get_db()
+            db.execute("UPDATE users SET test_done = 1 WHERE email = ?", (session["user"],))
+            db.commit()
 
         return render_template("test_result.html", score=score, total=total, passed=passed)
 
@@ -142,6 +153,16 @@ def login():
             return "Invalid credentials", 401
 
         session["user"] = email
+
+        db = get_db()
+        progress = db.execute(
+            "SELECT training_done, test_done FROM users WHERE email = ?",
+            (email,)
+        ).fetchone()
+
+        session["training_done"] = bool(progress["training_done"])
+        session["test_done"] = bool(progress["test_done"])
+
         return redirect("/")
 
     return render_template("login.html")
@@ -160,6 +181,16 @@ def login_local():
         return "Incorrect password"
 
     session["user"] = email
+
+    db = get_db()
+    progress = db.execute(
+        "SELECT training_done, test_done FROM users WHERE email = ?",
+        (email,)
+    ).fetchone()
+
+    session["training_done"] = bool(progress["training_done"])
+    session["test_done"] = bool(progress["test_done"])
+
     return redirect("/")
 
 
@@ -170,13 +201,6 @@ def login_google():
 
 @app.route("/auth/google/callback")
 def google_callback():
-    print("\n===== CALLBACK HIT =====")
-    print("CALLBACK URL:", request.url)
-    print("CONFIG REDIRECT_URI:", GOOGLE_REDIRECT_URI)
-
-    code = request.args.get("code")
-    print("CODE FROM GOOGLE:", code)
-
     code = request.args.get("code")
     token_data = exchange_code_for_token(code)
     access_token = token_data.get("access_token")
@@ -189,14 +213,18 @@ def google_callback():
         create_user(email, google_id=google_user["id"])
         user = get_user_by_email(email)
 
-    session["user"] = {
-        "email": email,
-        "name": google_user.get("name"),
-        "picture": google_user.get("picture")
-    }
+    session["user"] = email
+
+    db = get_db()
+    progress = db.execute(
+        "SELECT training_done, test_done FROM users WHERE email = ?",
+        (email,)
+    ).fetchone()
+
+    session["training_done"] = bool(progress["training_done"])
+    session["test_done"] = bool(progress["test_done"])
 
     return redirect("/")
-
 
 
 @app.route("/logout")
