@@ -16,34 +16,40 @@
 <div class="container mt-5" style="max-width: 500px;">
 
     <div class="card shadow-sm p-4">
-        <h2 class="fw-bold mb-4 text-center">Create an Account</h2>
+    <h2 class="fw-bold mb-4 text-center">Create an Account</h2>
 
-        <form action="/register" method="POST">
+    {% if error %}
+    <div class="alert alert-danger text-center">
+        {{ error }}
+    </div>
+    {% endif %}
 
-            <div class="mb-3">
-                <label class="form-label">Email</label>
+    <form action="/register" method="POST">
+            
+        <div class="mb-3">
+            <label class="form-label">Email</label>
                 <input 
                     type="email" 
                     name="email" 
                     class="form-control" 
-                    placeholder="Enter your school email"
+                    placeholder="Enter your email"
                     required
                 >
-            </div>
 
-            <div class="mb-3">
-                <label class="form-label">Password</label>
-                <input 
-                    type="password" 
-                    name="password" 
-                    class="form-control" 
-                    placeholder="Create a password"
-                    required
-                >
-            </div>
 
-            <button class="btn btn-primary w-100 py-2">Register</button>
-        </form>
+        <div class="mb-3">
+            <label class="form-label">Password</label>
+            <input 
+                type="password" 
+                name="password" 
+                class="form-control" 
+                placeholder="Create a password"
+                required
+            >
+        </div>
+
+        <button class="btn btn-primary w-100 py-2">Register</button>
+    </form>
 <div class="text-center my-3">
     <span>or</span>
 </div>

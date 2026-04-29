@@ -54,7 +54,7 @@
         </div>
 
         <div class="col-md-4">
-            <h3>My Reservations</h3>
+            <h3>Middle Room Reservations</h3>
             <ul id="myBookings" class="list-group">
                 <li class="list-group-item">Loading...</li>
             </ul>
@@ -76,42 +76,45 @@ async function book(day, slot) {
 }
 
 async function cancelBooking(id) {
-    await fetch("/api/cancel_booking", {
+    const res = await fetch("/api/cancel_booking", {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({ id })
     });
 
+    const data = await res.json();
+    if (!data.success) {
+        alert(data.message);
+    }
+
     loadBookings();
 }
-
 async function loadBookings() {
-    const res = await fetch("/api/my_bookings");
-    const data = await res.json();
+
+    const allRes = await fetch("/api/all_bookings");
+    const allBookings = await allRes.json();
+
+    const myRes = await fetch("/api/my_bookings");
+    const myBookings = await myRes.json();
 
     const list = document.getElementById("myBookings");
     list.innerHTML = "";
 
-    // Reset all buttons
     document.querySelectorAll("button[id]").forEach(btn => {
+        const original = btn.getAttribute("data-original");
+        btn.innerText = original;
         btn.disabled = false;
-        btn.innerText = btn.innerText.replace("Booked", "Book");
+        btn.className = "btn btn-primary btn-sm";
+
+        const [day, slot] = original.replace("Book ", "").split(" ");
+        btn.onclick = () => book(btn.dataset.day, btn.dataset.slot);
     });
 
-    if (data.length === 0) {
-        list.innerHTML = "<li class='list-group-item'>No bookings yet.</li>";
-        return;
+    if (myBookings.length === 0) {
+        list.innerHTML = "<li class='list-group-item'>No reservations yet.</li>";
     }
 
-    data.forEach(b => {
-        const id = `${b.day.toLowerCase()}_${b.slot.toLowerCase()}`;
-        const btn = document.getElementById(id);
-
-        if (btn) {
-            btn.disabled = true;
-            btn.innerText = "Booked";
-        }
-
+    myBookings.forEach(b => {
         list.innerHTML += `
             <li class="list-group-item d-flex justify-content-between align-items-center">
                 ${b.day} — ${b.slot}
@@ -119,10 +122,41 @@ async function loadBookings() {
             </li>
         `;
     });
+
+    allBookings.forEach(b => {
+        const id = `${b.day.toLowerCase()}_${b.slot.toLowerCase()}`;
+        const btn = document.getElementById(id);
+
+        if (!btn) return;
+
+        const username = b.username;
+
+        if (myBookings.some(m => m.id === b.id)) {
+            btn.disabled = false;
+            btn.innerText = "Cancel";
+            btn.className = "btn btn-danger btn-sm";
+            btn.onclick = () => cancelBooking(b.id);
+        }
+
+        else {
+            btn.disabled = true;
+            btn.innerText = `Booked by ${username}`;
+            btn.className = "btn btn-secondary btn-sm";
+        }
+    });
 }
+
+document.querySelectorAll("button[id]").forEach(btn => {
+    btn.setAttribute("data-original", btn.innerText);
+    const parts = btn.id.split("_");
+    btn.dataset.day = parts[0].charAt(0).toUpperCase() + parts[0].slice(1);
+    btn.dataset.slot = parts[1].charAt(0).toUpperCase() + parts[1].slice(1);
+});
 
 loadBookings();
 </script>
+
+
 
 </body>
 </html>

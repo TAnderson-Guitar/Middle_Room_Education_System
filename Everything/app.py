@@ -1,14 +1,11 @@
 import sys, os
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-
 from flask import Flask, render_template, request, jsonify, redirect, session
 from utils.security import verify_password
-from database.models import get_user_by_email, create_user
+from database.models import get_user_by_email, create_user, get_db, create_booking, get_bookings_for_user, booking_exists, delete_booking
 from auth.oauth import google_login_url, exchange_code_for_token, get_google_user_info
 from config import FLASK_SECRET_KEY, GOOGLE_REDIRECT_URI
-from database.models import create_booking, get_bookings_for_user, booking_exists, delete_booking
-from database.models import get_db
 
 
 app = Flask(__name__)
@@ -150,7 +147,7 @@ def login():
 
         user = get_user_by_email(email)
         if not user or not verify_password(password, user["password_hash"]):
-            return "Invalid credentials", 401
+            return render_template("login.html", error="Invalid email or password")
 
         session["user"] = email
 
@@ -253,7 +250,7 @@ def register():
 
         existing_user = get_user_by_email(email)
         if existing_user:
-            return "User already exists", 400
+            return render_template("register.html", error="User already exists")
 
         create_user(email, password)
         session["user"] = email
@@ -286,10 +283,21 @@ def api_book():
     day = data.get("day")
     slot = data.get("slot")
 
-    email = session["user"] if isinstance(session["user"], str) else session["user"]["email"]
+    email = session["user"]
 
-    if booking_exists(email, day, slot):
-        return jsonify({"success": False, "message": "You already booked this slot."})
+    # Check if ANYONE booked the slot
+    db = get_db()
+    existing = db.execute(
+        "SELECT email FROM bookings WHERE day = ? AND slot = ?",
+        (day, slot)
+    ).fetchone()
+
+    if existing:
+        username = existing["email"].split("@")[0]
+        return jsonify({
+            "success": False,
+            "message": f"Already booked by {username}"
+        })
 
     create_booking(email, day, slot)
 
@@ -302,12 +310,45 @@ def api_cancel_booking():
 
     data = request.json
     booking_id = data.get("id")
+    email = session["user"]
 
-    email = session["user"] if isinstance(session["user"], str) else session["user"]["email"]
+    db = get_db()
+    booking = db.execute(
+        "SELECT email FROM bookings WHERE id = ?",
+        (booking_id,)
+    ).fetchone()
+
+    if not booking:
+        return jsonify({"success": False, "message": "Booking not found"})
+
+    if booking["email"] != email:
+        return jsonify({"success": False, "message": "You cannot cancel another user's booking."})
 
     delete_booking(booking_id, email)
 
     return jsonify({"success": True})
+
+
+@app.route("/api/all_bookings")
+def all_bookings():
+    if not is_logged_in():
+        return jsonify([])
+
+    db = get_db()
+    rows = db.execute("SELECT id, email, day, slot FROM bookings").fetchall()
+
+    bookings = []
+    for r in rows:
+        username = r["email"].split("@")[0]
+        bookings.append({
+            "id": r["id"],
+            "email": r["email"],
+            "username": username,
+            "day": r["day"],
+            "slot": r["slot"]
+        })
+
+    return jsonify(bookings)
 
 
 if __name__ == "__main__":

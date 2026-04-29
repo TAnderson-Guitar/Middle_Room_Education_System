@@ -10,13 +10,19 @@
 {% include "header.html" %}
 <body>
     <div class="banner">
-  <h1>Login to the Middle Room</h1>
-</div>
+        <h1>Login to the Middle Room</h1>
+    </div>
 
 <div class="container mt-5" style="max-width: 500px;">
 
     <div class="card shadow-sm p-4">
         <h2 class="fw-bold mb-4 text-center">Login</h2>
+
+        {% if error %}
+        <div class="alert alert-danger text-center">
+            {{ error }}
+        </div>
+        {% endif %}
 
         <form action="/login" method="POST">
 
@@ -44,14 +50,14 @@
 
             <button class="btn btn-primary w-100 py-2">Login</button>
         </form>
-<div class="text-center my-3">
-    <span>or</span>
-</div>
 
-<a href="/login/google" class="btn btn-danger w-100">
-    Continue with Google
-</a>
+        <div class="text-center my-3">
+            <span>or</span>
+        </div>
 
+        <a href="/login/google" class="btn btn-danger w-100">
+            Continue with Google
+        </a>
 
         <hr class="my-4">
 

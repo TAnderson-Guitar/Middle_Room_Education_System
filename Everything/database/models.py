@@ -66,3 +66,7 @@ def delete_booking(booking_id, email):
         (booking_id, email)
     )
     db.commit()
+
+def get_all_bookings():
+    db = get_db()
+    return db.execute("SELECT * FROM bookings").fetchall()
