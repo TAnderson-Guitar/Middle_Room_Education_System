@@ -12,18 +12,18 @@
     <div class="banner">
   <h1>Register to the Middle Room</h1>
 </div>
-
+ 
 <div class="container mt-5" style="max-width: 500px;">
 
     <div class="card shadow-sm p-4">
-    <h2 class="fw-bold mb-4 text-center">Create an Account</h2>
+    <h2 class="fw-bold mb-4 text-center">Create an Account</h2> 
 
     {% if error %}
     <div class="alert alert-danger text-center">
-        {{ error }}
+        {{ error }} 
     </div>
     {% endif %}
-
+ 
     <form action="/register" method="POST">
             
         <div class="mb-3">
@@ -35,7 +35,6 @@
                     placeholder="Enter your email"
                     required
                 >
-
 
         <div class="mb-3">
             <label class="form-label">Password</label>
