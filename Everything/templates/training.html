@@ -22,18 +22,15 @@
 
     <div class="card shadow-sm mb-4">
         <div class="card-body">
-
-            <!-- SECTION 1 -->
             <h4 class="fw-semibold mb-3">1. Power & Equipment Safety</h4>
             <img src="{{ url_for('static', filename='training/Front_button.jpeg') }}" 
                  class="img-fluid rounded mb-3" alt="Power safety">
             <ul>
-                <li>Only use the labelled power switches — never unplug anything from the wall.</li>
-                <li>If you see green tape or “DO NOT UNPLUG”, leave it exactly as it is.</li>
-                <li>Report damaged plugs, loose cables, or unusual noises immediately.</li>
+                <li>Never unplug anything from the wall.</li>
+                <li>If you see “DO NOT UNPLUG”, leave it exactly as it is and do not unplug.</li>
+                <li>Tell the teacher if there are any damaged cables, loose cables, or unusual noises immediately.</li>
             </ul>
 
-            <!-- SECTION 2 -->
             <h4 class="fw-semibold mt-4 mb-3">2. Amplifiers, Pedalboards & Volume Control</h4>
             <img src="{{ url_for('static', filename='training/Amps.jpeg') }}" 
                  class="img-fluid rounded mb-3" alt="Amplifier stack">
@@ -43,17 +40,24 @@
                 <li>Keep volume at a safe level at all times.</li>
             </ul>
 
-            <!-- SECTION 3 -->
             <h4 class="fw-semibold mt-4 mb-3">3. Mixing Desk & Audio Equipment</h4>
             <img src="{{ url_for('static', filename='training/MovingAllFaders.jpeg') }}" 
                  class="img-fluid rounded mb-3" alt="Mixing desk">
             <ul>
                 <li>Only adjust the controls you have been shown.</li>
-                <li>Leave faders and knobs where you found them unless instructed.</li>
-                <li>Use headphones when monitoring to avoid feedback.</li>
+                <li>Only adjust faders when you know exactly which instrument they control.</li>
+                <li>Remember if you need help, ask a teacher</li>
             </ul>
+<p>
+    For more information, read the 
+    <a href="https://www.allen-heath.com/content/uploads/2023/06/Qu-Mixer-Getting-Started-Guide-AP10025_2-V1.9-1.pdf" 
+       target="_blank" 
+       rel="noopener noreferrer">
+       QU‑16 Getting Started Manual
+    </a>
+</p>
 
-            <!-- SECTION 4 -->
+
             <h4 class="fw-semibold mt-4 mb-3">4. Instruments & Room Care</h4>
             <img src="{{ url_for('static', filename='training/GuitarsandBass.jpeg') }}" 
                  class="img-fluid rounded mb-3" alt="Guitar wall">
@@ -61,9 +65,9 @@
                 <li>Only take instruments off the wall if you are using them.</li>
                 <li>Return every guitar, bass, or keyboard to its correct stand.</li>
                 <li>Do not leave instruments or cables on the floor.</li>
+                <li>Remember: Bass at the bottom, Guitars at the top</li>
             </ul>
 
-            <!-- SECTION 5 -->
             <h4 class="fw-semibold mt-4 mb-3">5. Microphones & Recording Areas</h4>
             <img src="{{ url_for('static', filename='training/FeedbackMics.jpeg') }}" 
                  class="img-fluid rounded mb-3" alt="Microphone use">
@@ -73,12 +77,10 @@
                 <li>Keep noise reasonable when others are recording.</li>
             </ul>
 
-            <!-- SECTION 6 -->
             <h4 class="fw-semibold mt-5 mb-3">6. How to Turn the Middle Room On</h4>
 
             <div class="row mb-4">
-
-                <!-- FRONT BUTTON -->
+            
                 <div class="col-md-6 text-center">
                     <img src="{{ url_for('static', filename='training/Front_button.jpeg') }}"
                          class="img-fluid rounded mb-2" alt="Front power button">
@@ -88,7 +90,6 @@
                     </p>
                 </div>
 
-                <!-- BACK BUTTON -->
                 <div class="col-md-6 text-center">
                     <img src="{{ url_for('static', filename='training/Backbutton.jpeg') }}"
                          class="img-fluid rounded mb-2" alt="Back power button">
