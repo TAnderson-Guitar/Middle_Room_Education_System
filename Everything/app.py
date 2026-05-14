@@ -1,11 +1,12 @@
+"""Main App for everything. Handles routing, authentication, and API endpoints."""
 import sys, os
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from flask import Flask, render_template, request, jsonify, redirect, session
 from utils.security import verify_password
-from database.models import get_user_by_email, create_user, get_db, create_booking, get_bookings_for_user, booking_exists, delete_booking
+from database.models import get_user_by_email, create_user, get_db, create_booking, get_bookings_for_user, delete_booking
 from auth.oauth import google_login_url, exchange_code_for_token, get_google_user_info
-from config import FLASK_SECRET_KEY, GOOGLE_REDIRECT_URI
+from config import FLASK_SECRET_KEY
 
 
 app = Flask(__name__)
@@ -223,11 +224,19 @@ def google_callback():
 
     return redirect("/")
 
-
 @app.route("/logout")
 def logout():
+    username = None
+    if "user" in session:
+        username = session["user"].split("@")[0]
+
     session.clear()
-    return redirect("/")
+    return redirect(f"/logged_out?u={username}")
+
+@app.route("/logged_out")
+def logged_out():
+    username = request.args.get("u", "User")
+    return render_template("logged_out.html", username=username)
 
 @app.route("/api/test/submit", methods=["POST"])
 def submit_test():
@@ -285,7 +294,6 @@ def api_book():
 
     email = session["user"]
 
-    # Check if ANYONE booked the slot
     db = get_db()
     existing = db.execute(
         "SELECT email FROM bookings WHERE day = ? AND slot = ?",
