@@ -1,41 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 <link rel="shortcut icon" href="https://edu.sites.moodlecentral.com.au/ap/schools/nsw/quakershil-h/pluginfile.php/1/theme_moove/favicon/1772497795/QHHS%20Logo.ico">
 
 <header style="background-color: #ffffff; padding: 15px 0;">
-    <div id="menu" class="container d-flex justify-content-between align-items-center">
-        <a href="/" class="d-flex align-items-center text-decoration-none">
-            <img src="{{ url_for('static', filename='icon.png') }}" 
-                 alt="Logo" 
-                 style="height: 40px; width: 40px; margin-right: 10px;">
-            <h1 style="font-weight: bold; margin: 0; color: #19244c;">
-                Middle Room Education and Booking
-            </h1>
-        </a>
-        <nav>
-            <ul style="list-style: none; padding: 0; display: flex; gap: 20px; align-items: center; margin: 0;">
+    <nav class="navbar">
+        <div class="container d-flex align-items-center">
 
-                <li><a class="active text-#19244c" href="/">Home</a></li>
-                <li><a class="active text-#19244c" href="/training">Learn More</a></li>
-                <li><a class="active text-#19244c" href="/test">Take Your Test</a></li>
-                <li><a class="active text-#19244c" href="/booking">Book a Reservation</a></li>
+            <a href="/" class="navbar-brand d-flex align-items-center">
+                <img src="{{ url_for('static', filename='icon.png') }}" 
+                     alt="Logo" 
+                     style="height: 40px; width: 40px; margin-right: 10px;">
+                <span style="font-weight: bold; color: #19244c;">
+                    Middle Room Education and Booking
+                </span>
+            </a>
+
+            <ul class="navbar-nav ms-auto d-none d-lg-flex" style="gap: 20px;">
+                <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="/training">Learn More</a></li>
+                <li class="nav-item"><a class="nav-link" href="/test">Take Your Test</a></li>
+                <li class="nav-item"><a class="nav-link" href="/booking">Book a Reservation</a></li>
 
                 {% if session.get("user") %}
-                <li class="dropdown">
-                    <a class="dropdown-toggle text-#19244c" 
-                       href="#" 
-                       role="button" 
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle"
+                       href="#"
                        data-bs-toggle="dropdown">
-                        {% if session["user"] is string %}
                         {{ session["user"].split("@")[0] }}
-                        {% else %}
-                            {{ session["user"]["email"].split("@")[0] }}
-                        {% endif %}
-
                     </a>
-
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li><a class="dropdown-item" href="/training">Training</a></li>
                         <li><a class="dropdown-item" href="/test">Test</a></li>
@@ -44,14 +41,29 @@
                         <li><a class="dropdown-item text-danger" href="/logout">Logout</a></li>
                     </ul>
                 </li>
-
-                {% else %}
-                <li><a class="active text-#19244c" href="/login">Login</a></li>
                 {% endif %}
-
             </ul>
-        </nav>
 
-    </div>
+            {% if session.get("user") %}
+            <div class="dropdown ms-auto d-lg-none">
+                <button class="navbar-toggler" 
+                        type="button" 
+                        id="mobileUserMenu" 
+                        data-bs-toggle="dropdown">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="mobileUserMenu">
+                    <li><a class="dropdown-item" href="/training">Training</a></li>
+                    <li><a class="dropdown-item" href="/test">Test</a></li>
+                    <li><a class="dropdown-item" href="/booking">Booking</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item text-danger" href="/logout">Logout</a></li>
+                </ul>
+            </div>
+            {% endif %}
+
+        </div>
+    </nav>
 </header>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
