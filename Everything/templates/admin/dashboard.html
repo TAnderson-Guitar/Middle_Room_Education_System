@@ -1,0 +1,62 @@
+{% include "header.html" %}
+
+<div class="container mt-5 mb-5">
+
+    <div class="card shadow p-4 pb-5" style="border-radius: 12px;">
+        <h1 class="mb-4" style="color:#19244c; font-weight:700;">
+            Admin Dashboard
+        </h1>
+
+        <div class="row g-4">
+
+            <div class="col-md-6 col-lg-4">
+                <a href="/admin/training" class="text-decoration-none">
+                    <div class="card shadow-sm p-4 h-100">
+                        <h4 style="color:#19244c;">Training Content</h4>
+                        <p class="text-muted">Edit and manage training sections.</p>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <a href="/admin/questions" class="text-decoration-none">
+                    <div class="card shadow-sm p-4 h-100">
+                        <h4 style="color:#19244c;">Test Questions</h4>
+                        <p class="text-muted">Add, remove, or update test questions.</p>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <a href="/admin/bookings" class="text-decoration-none">
+                    <div class="card shadow-sm p-4 h-100">
+                        <h4 style="color:#19244c;">Bookings</h4>
+                        <p class="text-muted">View and manage all bookings.</p>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <a href="/admin/users" class="text-decoration-none">
+                    <div class="card shadow-sm p-4 h-100">
+                        <h4 style="color:#19244c;">User Progress</h4>
+                        <p class="text-muted">Check training and test completion.</p>
+                    </div>
+                </a>
+            </div>
+
+            {% if session.get("is_superadmin") %}
+            <div class="col-md-6 col-lg-4">
+                <a href="/superadmin" class="text-decoration-none">
+                    <div class="card shadow-sm p-4 h-100 border-danger">
+                        <h4 style="color:#b30000;">Super Admin Panel</h4>
+                        <p class="text-muted">Manage admins and system settings.</p>
+                    </div>
+                </a>
+            </div>
+            {% endif %}
+
+        </div>
+    </div>
+
+</div>

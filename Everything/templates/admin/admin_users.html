@@ -1,0 +1,32 @@
+{% include "header.html" %}
+
+<div class="container mt-5 mb-5">
+    <div class="card shadow p-4 pb-5" style="border-radius: 12px;">
+
+        <h1 class="mb-4" style="color:#19244c; font-weight:700;">
+            User Progress
+        </h1>
+
+        <div class="table-responsive">
+            <table class="table table-striped align-middle">
+                <thead>
+                    <tr>
+                        <th>Email</th>
+                        <th>Training Done</th>
+                        <th>Test Done</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for u in users %}
+                    <tr>
+                        <td>{{ u.email }}</td>
+                        <td>{{ "Yes" if u.training_done else "No" }}</td>
+                        <td>{{ "Yes" if u.test_done else "No" }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>

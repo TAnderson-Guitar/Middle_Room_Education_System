@@ -1,0 +1,38 @@
+{% include "header.html" %}
+
+<div class="container mt-5 mb-5">
+    <div class="card shadow p-4 pb-5" style="border-radius: 12px;">
+
+        <h1 class="mb-4" style="color:#19244c; font-weight:700;">
+            All Bookings
+        </h1>
+
+        <div class="table-responsive">
+            <table class="table table-striped align-middle">
+                <thead>
+                    <tr>
+                        <th>Email</th>
+                        <th>Day</th>
+                        <th>Slot</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for b in bookings %}
+                    <tr>
+                        <td>{{ b.email }}</td>
+                        <td>{{ b.day }}</td>
+                        <td>{{ b.slot }}</td>
+                        <td>
+                            <form action="/admin/bookings/delete/{{ b.id }}" method="POST">
+                                <button class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>

@@ -8,9 +8,11 @@
 <link rel="shortcut icon" href="https://edu.sites.moodlecentral.com.au/ap/schools/nsw/quakershil-h/pluginfile.php/1/theme_moove/favicon/1772497795/QHHS%20Logo.ico">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
+
 {% include "header.html" %}
 
 <body>
+
 <div class="banner mb-4">
     <h1>Middle Room Training</h1>
 </div>
@@ -21,102 +23,32 @@
         <p class="lead">Learn how to safely and responsibly use the Middle Room before booking.</p>
     </div>
 
+    {% for s in sections %}
     <div class="card shadow-sm mb-4">
         <div class="card-body">
-            <h4 class="fw-semibold mb-3">1. Power & Equipment Safety</h4>
-            <img src="{{ url_for('static', filename='training/Front_button.jpeg') }}" 
-                 class="img-fluid rounded mb-3" alt="Power safety">
-            <ul>
-                <li>Never unplug anything from the wall.</li>
-                <li>If you see “DO NOT UNPLUG”, leave it exactly as it is and do not unplug.</li>
-                <li>Tell the teacher if there are any damaged cables, loose cables, or unusual noises immediately.</li>
-            </ul>
 
-            <h4 class="fw-semibold mt-4 mb-3">2. Amplifiers, Pedalboards & Volume Control</h4>
-            <img src="{{ url_for('static', filename='training/Amps.jpeg') }}" 
-                 class="img-fluid rounded mb-3" alt="Amplifier stack">
-            <ul>
-                <li>Do not move or rewire the amplifier stacks, they are set up correctly already.</li>
-                <li>Never pull apart the pedalboards or change patch cables.</li>
-                <li>Keep volume at a safe level at all times.</li>
-            </ul>
+            <h4 class="fw-semibold mb-3">{{ s.title }}</h4>
 
-            <h4 class="fw-semibold mt-4 mb-3">3. Mixing Desk & Audio Equipment</h4>
-            <img src="{{ url_for('static', filename='training/MovingAllFaders.jpeg') }}" 
-                 class="img-fluid rounded mb-3" alt="Mixing desk">
-            <ul>
-                <li>Only adjust the controls you have been shown.</li>
-                <li>Only adjust faders when you know exactly which instrument they control.</li>
-                <li>Remember if you need help, ask a teacher</li>
-            </ul>
-<p>
-    For more information, read the 
-    <a href="https://www.allen-heath.com/content/uploads/2023/06/Qu-Mixer-Getting-Started-Guide-AP10025_2-V1.9-1.pdf" 
-       target="_blank" 
-       rel="noopener noreferrer">
-       QU‑16 Getting Started Manual
-    </a>
-</p>
+            {% if s.image_path %}
+            <img src="{{ url_for('static', filename='uploads/training/' + s.image_path) }}"
+                 class="img-fluid rounded mb-3">
+            {% endif %}
 
-
-            <h4 class="fw-semibold mt-4 mb-3">4. Instruments & Room Care</h4>
-            <img src="{{ url_for('static', filename='training/GuitarsandBass.jpeg') }}" 
-                 class="img-fluid rounded mb-3" alt="Guitar wall">
-            <ul>
-                <li>Only take instruments off the wall if you are using them.</li>
-                <li>Return every guitar, bass, or keyboard to its correct stand.</li>
-                <li>Do not leave instruments or cables on the floor.</li>
-                <li>Remember: Bass at the bottom, Guitars at the top</li>
-            </ul>
-
-            <h4 class="fw-semibold mt-4 mb-3">5. Microphones & Recording Areas</h4>
-            <img src="{{ url_for('static', filename='training/FeedbackMics.jpeg') }}" 
-                 class="img-fluid rounded mb-3" alt="Microphone use">
-            <ul>
-                <li>Handle microphones carefully, do not swing them by the cable.</li>
-                <li>Do not move drum shields or recording panels.</li>
-                <li>Keep noise reasonable when others are recording.</li>
-            </ul>
-
-            <h4 class="fw-semibold mt-5 mb-3">6. How to Turn the Middle Room On</h4>
-
-            <div class="row mb-4">
-            
-                <div class="col-md-6 text-center">
-                    <img src="{{ url_for('static', filename='training/Front_button.jpeg') }}"
-                         class="img-fluid rounded mb-2" alt="Front power button">
-                    <p class="fw-semibold">1. Front Power Button</p>
-                    <p class="text-muted small">
-                        This button is located at the front of the room. Press it first to power the main equipment rack and speakers.
-                    </p>
-                </div>
-
-                <div class="col-md-6 text-center">
-                    <img src="{{ url_for('static', filename='training/Backbutton.jpeg') }}"
-                         class="img-fluid rounded mb-2" alt="Back power button">
-                    <p class="fw-semibold">2. Back Power Button</p>
-                    <p class="text-muted small">
-                        This button is located at the back of the room. Press it second to activate the mixer, amps, and recording gear.
-                    </p>
-                </div>
-
-            </div>
-
-            <p class="text-muted">
-                Both buttons must be turned on for the Middle Room to fully power up. Do not unplug anything or touch taped cables.
-            </p>
+            <div>{{ s.content|safe }}</div>
 
         </div>
     </div>
+    {% endfor %}
 
-<div class="text-center mb-5">
-    <form method="POST">
-        <button class="btn btn-success btn-lg px-5 py-2" type="submit">
-            Training Completed - Continue to Test
-        </button>
-    </form>
+    <div class="text-center mb-5">
+        <form method="POST">
+            <button class="btn btn-success btn-lg px-5 py-2" type="submit">
+                Training Completed - Continue to Test
+            </button>
+        </form>
+    </div>
+
 </div>
-
 
 </body>
 </html>

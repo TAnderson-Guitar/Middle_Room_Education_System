@@ -9,131 +9,52 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 {% include "header.html" %}
-<body>
-    <div class="banner">
-  <h1>Middle Room Test</h1>
-</div>
-<div class="container mt-5">
-    <div class="text-center mb-4">
-        <p class="lead">
-            Answer All Questions correctly to gain access to the Middle Room. Good Luck!
-        </p>
-    </div>
 
-<div class="mb-4">
-    <div class="d-flex justify-content-between">
-        <span id="progressText">Question 1 of {{ questions|length }}</span>
-        <span id="answeredCount">0 / {{ questions|length }} answered</span>
-    </div>
-    <div class="progress">
-        <div id="progressBar" class="progress-bar" role="progressbar" style="width: 0%"></div>
-    </div>
-</div>
+<div class="container mt-5 mb-5">
+    <div class="card shadow p-4 pb-5" style="border-radius: 12px;">
 
+        <h1 class="mb-4" style="color:#19244c; font-weight:700;">
+            Middle Room Test
+        </h1>
 
-    <form method="POST" id="testForm">
+        <form method="POST">
 
-        {% for q in questions %}
-        <div class="card mb-4 question-card" id="question-{{ loop.index0 }}" style="display: none;">
-            <div class="card-body">
-                <h5 class="card-title fw-bold">{{ q.text }}</h5>
+            {% for q in questions %}
+            <div class="mb-4 p-3 border rounded">
 
-                {% for option in q.options %}
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" 
-                           name="{{ q.id }}" 
-                           value="{{ loop.index0 }}">
-                    <label class="form-check-label">
-                        {{ option }}
-                    </label>
+                <h5 class="fw-semibold">{{ loop.index }}. {{ q.question }}</h5>
+
+                <div class="form-check mt-2">
+                    <input class="form-check-input" type="radio" name="{{ q.id }}" value="a" required>
+                    <label class="form-check-label">A. {{ q.option_a }}</label>
                 </div>
-                {% endfor %}
+
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="{{ q.id }}" value="b">
+                    <label class="form-check-label">B. {{ q.option_b }}</label>
+                </div>
+
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="{{ q.id }}" value="c">
+                    <label class="form-check-label">C. {{ q.option_c }}</label>
+                </div>
+
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="{{ q.id }}" value="d">
+                    <label class="form-check-label">D. {{ q.option_d }}</label>
+                </div>
+
             </div>
-        </div>
-        {% endfor %}
+            {% endfor %}
 
-<div class="d-flex justify-content-between mt-3">
-    <button type="button" id="prevBtn" class="btn btn-secondary" onclick="prevQuestion()">Previous</button>
-    <button type="button" id="nextBtn" class="btn btn-primary" onclick="nextQuestion()">Next</button>
-    <button type="submit" id="submitBtn" class="btn btn-success" style="display: none;">Submit Test</button>
+            <button class="btn btn-success btn-lg px-5 py-2" type="submit">
+                Submit Test
+            </button>
+
+        </form>
+
+    </div>
 </div>
-
-    </form>
-</div>
-
-<script>
-let current = 0;
-const total = {{ questions|length }};
-const cards = document.querySelectorAll(".question-card");
-
-function showQuestion(index) {
-    cards.forEach((c, i) => {
-        c.style.display = i === index ? "block" : "none";
-    });
-
-    const prevBtn = document.getElementById("prevBtn");
-    if (index === 0) {
-        prevBtn.disabled = true;
-        prevBtn.classList.remove("btn-primary");
-        prevBtn.classList.add("btn-secondary");
-    } else {
-        prevBtn.disabled = false;
-        prevBtn.classList.remove("btn-secondary");
-        prevBtn.classList.add("btn-primary");
-    }
-
-    const nextBtn = document.getElementById("nextBtn");
-    if (index === total - 1) {
-        nextBtn.disabled = true;
-        nextBtn.classList.remove("btn-primary");
-        nextBtn.classList.add("btn-secondary");
-        document.getElementById("submitBtn").style.display = "inline-block";
-    } else {
-        nextBtn.disabled = false;
-        nextBtn.classList.remove("btn-secondary");
-        nextBtn.classList.add("btn-primary");
-        document.getElementById("submitBtn").style.display = "none";
-    }
-
-    document.getElementById("progressText").innerText =
-        `Question ${index + 1} of ${total}`;
-
-    updateProgress();
-}
-
-function nextQuestion() {
-    if (current < total - 1) {
-        current++;
-        showQuestion(current);
-    }
-}
-
-function prevQuestion() {
-    if (current > 0) {
-        current--;
-        showQuestion(current);
-    }
-}
-
-function updateProgress() {
-    let answered = 0;
-    document.querySelectorAll("input[type=radio]").forEach(r => {
-        if (r.checked) answered++;
-    });
-
-    const percent = (answered / total) * 100;
-    document.getElementById("progressBar").style.width = percent + "%";
-    document.getElementById("answeredCount").innerText =
-        `${answered} / ${total} answered`;
-}
-
-document.querySelectorAll("input[type=radio]").forEach(r => {
-    r.addEventListener("change", updateProgress);
-});
-
-showQuestion(0);
-</script>
-
 
 
 </body>

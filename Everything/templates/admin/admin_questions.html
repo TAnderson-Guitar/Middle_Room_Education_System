@@ -1,0 +1,77 @@
+{% include "header.html" %}
+
+<div class="container mt-5 mb-5">
+    <div class="card shadow p-4 pb-5" style="border-radius: 12px;">
+
+        <h1 class="mb-4" style="color:#19244c; font-weight:700;">
+            Test Questions
+        </h1>
+
+        <!-- Add Question Form -->
+        <form action="/admin/questions/add" method="POST" class="mb-4">
+            <div class="mb-3">
+                <label class="form-label">Question</label>
+                <input name="question" class="form-control" required>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Option A</label>
+                    <input name="a" class="form-control" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Option B</label>
+                    <input name="b" class="form-control" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Option C</label>
+                    <input name="c" class="form-control" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Option D</label>
+                    <input name="d" class="form-control" required>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Correct Option (a/b/c/d)</label>
+                <input name="correct" class="form-control" required>
+            </div>
+
+            <button class="btn btn-primary">Add Question</button>
+        </form>
+
+        <hr>
+
+        <!-- Existing Questions -->
+        <div class="row g-4 mt-3">
+            {% for q in questions %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card shadow-sm p-3 h-100">
+
+                    <h5 style="color:#19244c;">{{ q.question }}</h5>
+
+                    <ul class="mt-2">
+                        <li><strong>A:</strong> {{ q.option_a }}</li>
+                        <li><strong>B:</strong> {{ q.option_b }}</li>
+                        <li><strong>C:</strong> {{ q.option_c }}</li>
+                        <li><strong>D:</strong> {{ q.option_d }}</li>
+                    </ul>
+
+                    <p class="text-success"><strong>Correct:</strong> {{ q.correct_option|upper }}</p>
+
+                    <div class="d-flex justify-content-between mt-auto">
+                        <a href="/admin/questions/edit/{{ q.id }}" class="btn btn-warning btn-sm">Edit</a>
+
+                        <form action="/admin/questions/delete/{{ q.id }}" method="POST">
+                            <button class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+    </div>
+</div>

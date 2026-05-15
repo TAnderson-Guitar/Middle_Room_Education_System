@@ -1,0 +1,47 @@
+{% include "header.html" %}
+
+<div class="container mt-5 mb-5">
+    <div class="card shadow p-4 pb-5" style="border-radius: 12px;">
+
+        <h1 class="mb-4" style="color:#19244c; font-weight:700;">
+            Edit Question
+        </h1>
+
+        <form method="POST">
+
+            <div class="mb-3">
+                <label class="form-label">Question</label>
+                <input name="question" class="form-control" value="{{ q.question }}" required>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Option A</label>
+                    <input name="a" class="form-control" value="{{ q.option_a }}" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Option B</label>
+                    <input name="b" class="form-control" value="{{ q.option_b }}" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Option C</label>
+                    <input name="c" class="form-control" value="{{ q.option_c }}" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Option D</label>
+                    <input name="d" class="form-control" value="{{ q.option_d }}" required>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Correct Option (a/b/c/d)</label>
+                <input name="correct" class="form-control" value="{{ q.correct_option }}" required>
+            </div>
+
+            <button class="btn btn-primary">Save Changes</button>
+            <a href="/admin/questions" class="btn btn-secondary">Cancel</a>
+
+        </form>
+
+    </div>
+</div>
