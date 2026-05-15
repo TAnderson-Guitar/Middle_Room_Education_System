@@ -8,7 +8,9 @@
 <link rel="shortcut icon" href="https://edu.sites.moodlecentral.com.au/ap/schools/nsw/quakershil-h/pluginfile.php/1/theme_moove/favicon/1772497795/QHHS%20Logo.ico">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
+
 {% include "header.html" %}
+
 <body>
 
 <div class="banner">
@@ -40,12 +42,12 @@
                         {% for slot in slots %}
                         <td>
                             <button 
-                                class="btn btn-primary btn-sm"
-                                onclick="book('{{ day }}', '{{ slot }}')"
+                                class="btn btn-primary btn-sm booking-btn"
                                 id="{{ day|lower }}_{{ slot|lower }}"
                             >
                                 Book {{ slot }}
                             </button>
+
                         </td>
                         {% endfor %}
                     </tr>
@@ -64,6 +66,20 @@
 </div>
 
 <script>
+
+document.querySelectorAll(".booking-btn").forEach(btn => {
+    const [day, slot] = btn.id.split("_");
+
+    btn.dataset.day = day.charAt(0).toUpperCase() + day.slice(1);
+    btn.dataset.slot = slot.charAt(0).toUpperCase() + slot.slice(1);
+
+    btn.dataset.original = `Book ${btn.dataset.slot}`;
+    btn.innerText = btn.dataset.original;
+
+    btn.onclick = () => book(btn.dataset.day, btn.dataset.slot);
+});
+
+
 async function book(day, slot) {
     const res = await fetch("/api/book", {
         method: "POST",
@@ -84,77 +100,65 @@ async function cancelBooking(id) {
     });
 
     const data = await res.json();
-    if (!data.success) {
-        alert(data.message);
-    }
+    if (!data.success) alert(data.message);
 
     loadBookings();
 }
+
 async function loadBookings() {
 
-    const allRes = await fetch("/api/all_bookings");
-    const allBookings = await allRes.json();
+    // 1. FETCH FIRST — prevents blue flash
+    const allBookings = await (await fetch("/api/all_bookings")).json();
+    const myBookings  = await (await fetch("/api/my_bookings")).json();
 
-    const myRes = await fetch("/api/my_bookings");
-    const myBookings = await myRes.json();
-
+    // 2. Update right-side list
     const list = document.getElementById("myBookings");
     list.innerHTML = "";
 
-    document.querySelectorAll("button[id]").forEach(btn => {
-        const original = btn.getAttribute("data-original");
-        btn.innerText = original;
-        btn.disabled = false;
-        btn.className = "btn btn-primary btn-sm";
+    if (myBookings.length === 0) {
+        list.innerHTML = "<li class='list-group-item'>No reservations yet.</li>";
+    } else {
+        myBookings.forEach(b => {
+            list.innerHTML += `
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    ${b.day} — ${b.slot}
+                    <button class="btn btn-danger btn-sm" onclick="cancelBooking(${b.id})">Cancel</button>
+                </li>
+            `;
+        });
+    }
 
-        const [day, slot] = original.replace("Book ", "").split(" ");
+    // 3. Reset all buttons AFTER fetch
+    document.querySelectorAll(".booking-btn").forEach(btn => {
+        btn.innerText = btn.dataset.original;
+        btn.disabled = false;
+        btn.className = "btn btn-primary btn-sm booking-btn";
         btn.onclick = () => book(btn.dataset.day, btn.dataset.slot);
     });
 
-    if (myBookings.length === 0) {
-        list.innerHTML = "<li class='list-group-item'>No reservations yet.</li>";
-    }
-
-    myBookings.forEach(b => {
-        list.innerHTML += `
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-                ${b.day} — ${b.slot}
-                <button class="btn btn-danger btn-sm" onclick="cancelBooking(${b.id})">Cancel</button>
-            </li>
-        `;
-    });
-
+    // 4. Apply booked states
     allBookings.forEach(b => {
-        const id = `${b.day.toLowerCase()}_${b.slot.toLowerCase()}`;
-        const btn = document.getElementById(id);
-
+        const btn = document.getElementById(`${b.day.toLowerCase()}_${b.slot.toLowerCase()}`);
         if (!btn) return;
 
-        const username = b.username;
+        const isMine = myBookings.some(m => m.id === b.id);
 
-        if (myBookings.some(m => m.id === b.id)) {
-            btn.disabled = false;
+        if (isMine) {
             btn.innerText = "Cancel";
-            btn.className = "btn btn-danger btn-sm";
+            btn.className = "btn btn-danger btn-sm booking-btn";
+            btn.disabled = false;
             btn.onclick = () => cancelBooking(b.id);
-        }
-
-        else {
+        } else {
+            btn.innerText = `Booked by ${b.username}`;
+            btn.className = "btn btn-secondary btn-sm booking-btn";
             btn.disabled = true;
-            btn.innerText = `Booked by ${username}`;
-            btn.className = "btn btn-secondary btn-sm";
+            btn.onclick = null;
         }
     });
 }
 
-document.querySelectorAll("button[id]").forEach(btn => {
-    btn.setAttribute("data-original", btn.innerText);
-    const parts = btn.id.split("_");
-    btn.dataset.day = parts[0].charAt(0).toUpperCase() + parts[0].slice(1);
-    btn.dataset.slot = parts[1].charAt(0).toUpperCase() + parts[1].slice(1);
-});
-
 loadBookings();
+
 </script>
 
 

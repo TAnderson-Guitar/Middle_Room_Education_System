@@ -291,7 +291,6 @@ def api_book():
     data = request.json
     day = data.get("day")
     slot = data.get("slot")
-
     email = session["user"]
 
     db = get_db()
@@ -299,6 +298,7 @@ def api_book():
         "SELECT email FROM bookings WHERE day = ? AND slot = ?",
         (day, slot)
     ).fetchone()
+    db.close()
 
     if existing:
         username = existing["email"].split("@")[0]
@@ -310,6 +310,7 @@ def api_book():
     create_booking(email, day, slot)
 
     return jsonify({"success": True, "message": f"Booked {slot} on {day}!"})
+
 
 @app.route("/api/cancel_booking", methods=["POST"])
 def api_cancel_booking():
@@ -325,6 +326,7 @@ def api_cancel_booking():
         "SELECT email FROM bookings WHERE id = ?",
         (booking_id,)
     ).fetchone()
+    db.close()
 
     if not booking:
         return jsonify({"success": False, "message": "Booking not found"})
@@ -335,6 +337,7 @@ def api_cancel_booking():
     delete_booking(booking_id, email)
 
     return jsonify({"success": True})
+
 
 
 @app.route("/api/all_bookings")

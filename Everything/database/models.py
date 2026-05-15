@@ -1,4 +1,4 @@
-from database.db import get_db
+from database.db import get_db, execute_write
 from utils.security import hash_password
 
 def get_user_by_email(email):
@@ -37,11 +37,13 @@ def create_user(email, password=None, google_id=None):
 
 def create_booking(email, day, slot):
     db = get_db()
-    db.execute(
+    execute_write(
+        db,
         "INSERT INTO bookings (email, day, slot) VALUES (?, ?, ?)",
         (email, day, slot)
     )
     db.commit()
+    db.close()
 
 def get_bookings_for_user(email):
     db = get_db()
@@ -61,11 +63,13 @@ def booking_exists(email, day, slot):
 
 def delete_booking(booking_id, email):
     db = get_db()
-    db.execute(
+    execute_write(
+        db,
         "DELETE FROM bookings WHERE id = ? AND email = ?",
         (booking_id, email)
     )
     db.commit()
+    db.close()
 
 def get_all_bookings():
     db = get_db()
