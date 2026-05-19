@@ -208,56 +208,6 @@ def superadmin_dashboard():
     return render_template("admin/superadmin_dashboard.html", users=users)
 
 
-
-
-TEST_QUESTIONS = [
-    {
-        "id": "q1",
-        "text": "Who is allowed to book the Middle Room?",
-        "options": [
-            "Any student at any time",
-            "Only trained and approved students",
-            "Parents and visitors",
-            "Only the principal"
-        ],
-        "answer": 1
-    },
-    {
-        "id": "q2",
-        "text": "What should you do if equipment is damaged?",
-        "options": [
-            "Keep using it",
-            "Hide it so no one sees",
-            "Report it to a teacher immediately",
-            "Leave it for the next person"
-        ],
-        "answer": 2
-    },
-    {
-        "id": "q3",
-        "text": "When should you arrive for your booking?",
-        "options": [
-            "Anytime during the session",
-            "5–10 minutes late",
-            "On time and ready to start",
-            "Only if you feel like it"
-        ],
-        "answer": 2
-    },
-    {
-        "id": "q4",
-        "text": "How should you leave the Middle Room?",
-        "options": [
-            "Messy, someone else will clean",
-            "Exactly how you found it or better",
-            "With gear left on",
-            "Chairs and cables everywhere"
-        ],
-        "answer": 1
-    }
-]
-
-
 @app.route("/training", methods=["GET", "POST"])
 def training():
     if not is_logged_in():

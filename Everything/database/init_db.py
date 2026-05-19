@@ -50,7 +50,7 @@ admins = [
     "luke.cole9@det.nsw.edu.au",
     "VALERIE.RODRIGUEZFREDES@det.nsw.edu.au",
     "McKenzie.Ward1@det.nsw.edu.au",
-    "twj.anderson08@gmail.com"
+    "twj.anderson08@hotmail.com"
 ]
 
 for email in admins:
