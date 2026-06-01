@@ -1,0 +1,3 @@
+Important: This application will not work while connected to the school Wi‑Fi network.
+The school network blocks external OAuth login requests, which prevents Google Sign‑In from completing.
+To use the app, please connect to your home Wi‑Fi or mobile hotspot before logging in.

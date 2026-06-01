@@ -42,7 +42,7 @@
                             {% endif %}
 
                             {% if session.get("is_superadmin") %}
-                            <li><a class="dropdown-item" href="/superadmin">Super Admin Panel</a></li>
+                            <a class="dropdown-item" href="/superadmin">Super Admin</a>
                             {% endif %}
 
                             <li><hr class="dropdown-divider"></li>
@@ -64,11 +64,12 @@
                         <li><a class="dropdown-item" href="/training">Training</a></li>
                         <li><a class="dropdown-item" href="/test">Test</a></li>
                         <li><a class="dropdown-item" href="/booking">Booking</a></li>
-
                         {% if session.get("is_admin") %}
                         <li><a class="dropdown-item" href="/admin">Admin Dashboard</a></li>
-                    {% endif %}
-
+                        {% endif %}
+                        {% if session.get("is_superadmin") %}
+                        <a class="dropdown-item" href="/superadmin">Super Admin</a>
+                        {% endif %}
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item text-danger" href="/logout">Logout</a></li>
                     </ul>

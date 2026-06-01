@@ -52,6 +52,66 @@ def superadmin_required(f):
         return f(*args, **kwargs)
     return wrapper
 
+@app.route("/superadmin")
+@superadmin_required
+def superadmin_panel():
+    db = get_db()
+    users = db.execute("SELECT * FROM users").fetchall()
+    return render_template("admin/superadmin.html", users=users)
+
+
+@app.route("/superadmin/make_admin/<email>", methods=["POST"])
+@superadmin_required
+def make_admin(email):
+    db = get_db()
+    db.execute("UPDATE users SET is_admin = 1 WHERE email = ?", (email,))
+    db.commit()
+    return redirect("/superadmin")
+
+@app.route("/superadmin/remove_admin/<email>", methods=["POST"])
+@superadmin_required
+def remove_admin(email):
+    db = get_db()
+    db.execute("UPDATE users SET is_admin = 0 WHERE email = ?", (email,))
+    db.commit()
+    return redirect("/superadmin")
+
+@app.route("/superadmin/reset_training/<email>", methods=["POST"])
+@superadmin_required
+def reset_training(email):
+    db = get_db()
+    db.execute("UPDATE users SET training_done = 0 WHERE email = ?", (email,))
+    db.commit()
+    return redirect("/superadmin")
+
+@app.route("/superadmin/reset_test/<email>", methods=["POST"])
+@superadmin_required
+def reset_test(email):
+    db = get_db()
+    db.execute("UPDATE users SET test_done = 0 WHERE email = ?", (email,))
+    db.commit()
+    return redirect("/superadmin")
+
+@app.route("/superadmin/delete_user/<email>", methods=["POST"])
+@superadmin_required
+def delete_user(email):
+    db = get_db()
+    db.execute("DELETE FROM bookings WHERE email = ?", (email,))
+
+    db.execute("DELETE FROM users WHERE email = ?", (email,))
+
+    db.commit()
+    return redirect("/superadmin")
+
+@app.route("/superadmin/make_superadmin/<email>", methods=["POST"])
+@superadmin_required
+def make_superadmin(email):
+    db = get_db()
+    db.execute("UPDATE users SET is_superadmin = 1 WHERE email = ?", (email,))
+    db.commit()
+    return redirect("/superadmin")
+
+
 @app.route("/admin")
 @admin_required
 def admin_dashboard():
@@ -200,14 +260,6 @@ def admin_users():
     users = db.execute("SELECT * FROM users").fetchall()
     return render_template("admin/admin_users.html", users=users)
 
-@app.route("/superadmin")
-@superadmin_required
-def superadmin_dashboard():
-    db = get_db()
-    users = db.execute("SELECT * FROM users").fetchall()
-    return render_template("admin/superadmin_dashboard.html", users=users)
-
-
 @app.route("/training", methods=["GET", "POST"])
 def training():
     if not is_logged_in():
@@ -289,13 +341,14 @@ def login():
 
         db = get_db()
         progress = db.execute(
-            "SELECT training_done, test_done, is_admin FROM users WHERE email = ?",
+            "SELECT training_done, test_done, is_admin, is_superadmin FROM users WHERE email = ?",
             (email,)
         ).fetchone()
 
         session["training_done"] = bool(progress["training_done"])
         session["test_done"] = bool(progress["test_done"])
         session["is_admin"] = bool(progress["is_admin"])
+        session["is_superadmin"] = bool(progress["is_superadmin"])
 
         return redirect("/")
 
@@ -348,6 +401,7 @@ def google_callback():
     session["training_done"] = bool(progress["training_done"])
     session["test_done"] = bool(progress["test_done"])
     session["is_admin"] = bool(progress["is_admin"])
+    session["is_superadmin"] = bool(progress["is_superadmin"])
 
     return redirect("/")
 

@@ -46,11 +46,25 @@ CREATE TABLE IF NOT EXISTS questions (
 )
 """)
 
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS audit_logs (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    actor_email TEXT NOT NULL,
+    target_email TEXT,
+    action TEXT NOT NULL,
+    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP)
+""")
+
 admins = [
     "luke.cole9@det.nsw.edu.au",
     "VALERIE.RODRIGUEZFREDES@det.nsw.edu.au",
     "McKenzie.Ward1@det.nsw.edu.au",
     "twj.anderson08@hotmail.com"
+]
+
+superadmins = [
+    "twj.anderson08@hotmail.com",
+    "luke.cole9@det.nsw.edu.au"
 ]
 
 for email in admins:
